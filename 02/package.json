@@ -1,7 +1,6 @@
 {
   "name": "02",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "",
@@ -11,5 +10,6 @@
   "license": "ISC",
   "devDependencies": {
     "lite-server": "^2.6.1"
-  }
+  },
+  "description": ""
 }

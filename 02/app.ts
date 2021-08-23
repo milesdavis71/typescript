@@ -1,5 +1,5 @@
-function add(n1: number, n2: number) {
-  return n1 + n2;
-}
-
-console.log(add(6, 8));
+const person = {
+  name: "pitju",
+  age: 50,
+};
+console.log(person.name);
