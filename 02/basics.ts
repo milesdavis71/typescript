@@ -7,8 +7,7 @@ function add(n1: number, n2: number, showResult: boolean, phase: string) {
   }
 }
 
-let number1: number;
-number1 = "6";
+const number1 = 6;
 const number2 = 5.8;
 const printResult = true;
 const resultPhrease = "Result is: ";
