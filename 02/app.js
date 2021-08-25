@@ -1,20 +1,17 @@
-var Role;
-(function (Role) {
-    Role[Role["ADMIN"] = 0] = "ADMIN";
-    Role[Role["READ_ONLY"] = 1] = "READ_ONLY";
-    Role[Role["AUTHOR"] = 2] = "AUTHOR";
-})(Role || (Role = {}));
-var person = {
-    name: "pitju",
-    age: 50,
-    hobbies: ["basketball", "skateboard"],
-    role: Role.ADMIN
-};
-var favoriteActivities;
-favoriteActivities = ["basketball", "skateboard"];
-console.log(person.name);
-for (var _i = 0, _a = person.hobbies; _i < _a.length; _i++) {
-    var hobby = _a[_i];
-    // console.log(hobby.map()); ERROR
+function combine(input1, input2, resultConversion) {
+    var result;
+    if (typeof input1 === 'number' &&
+        typeof input2 === 'number' &&
+        resultConversion === 'as-number') {
+        result = input1 + input2;
+    }
+    else {
+        (result = input1.toString() + input2.toString()),
+            resultConversion === 'as-text';
+    }
+    return result;
 }
-console.log(Role.ADMIN);
+var combinedNumbers = combine(6, 30, 'as-number');
+console.log(combinedNumbers);
+var combinedNames = combine('pitju', 'jaki', 'as-number');
+console.log(combinedNames);
