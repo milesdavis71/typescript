@@ -1,17 +1,18 @@
-function combine(input1, input2, resultConversion) {
-    var result;
-    if (typeof input1 === 'number' &&
-        typeof input2 === 'number' &&
-        resultConversion === 'as-number') {
-        result = input1 + input2;
-    }
-    else {
-        (result = input1.toString() + input2.toString()),
-            resultConversion === 'as-text';
-    }
-    return result;
+function add(n1, n2) {
+    return n1 + n2;
 }
-var combinedNumbers = combine(6, 30, 'as-number');
-console.log(combinedNumbers);
-var combinedNames = combine('pitju', 'jaki', 'as-number');
-console.log(combinedNames);
+function printResult(num) {
+    console.log('Az eredmény' + num);
+    return;
+}
+function addAndHandle(n1, n2, cb) {
+    var result = n1 + n2;
+    cb(result);
+}
+printResult(add(5, 12));
+var combineValues;
+combineValues = add;
+console.log('huhu' + combineValues(8, 8));
+addAndHandle(10, 20, function (result) {
+    console.log('huhu' + result);
+});
