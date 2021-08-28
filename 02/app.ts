@@ -1,4 +1,5 @@
 // BASICS
+
 // function add(n1: number, n2: number, showResult: boolean, phase: string) {
 //   const result = n1 + n2;
 //   if (showResult) {
@@ -7,14 +8,17 @@
 //     return result;
 //   }
 // }
+
 // const number1 = 6;
 // const number2 = 5.8;
 // const printResult = true;
 // const resultPhrease = "Result is: ";
 // add(number1, number2, printResult, resultPhrease);
+
 // UNION, ALIASES
 // type Combinable = number | string;
 // type ConversionDescriptor = 'as-number' | 'as-text';
+
 // function combine(
 //   input1: Combinable,
 //   input2: Combinable,
@@ -32,10 +36,13 @@
 //   }
 //   return result;
 // }
+
 // const combinedNumbers = combine(6, 30, 'as-number');
 // console.log(combinedNumbers);
+
 // const combinedNames = combine('pitju', 'jaki', 'as-text');
 // console.log(combinedNames);
+
 // ENUMS
 // enum Role {
 //   ADMIN,
@@ -55,22 +62,27 @@
 //   // console.log(hobby.map()); ERROR
 // }
 // console.log(Role.ADMIN);
-function add2(n1, n2) {
-    return n1 + n2;
+
+function add2(n1: number, n2: number) {
+  return n1 + n2;
 }
-function printResult(num) {
-    console.log('Az eredmény' + num);
-    return;
+
+function printResult(num: number): undefined {
+  console.log('Az eredmény' + num);
+  return;
 }
-function addAndHandle(n1, n2, cb) {
-    var result = n1 + n2;
-    cb(result);
+function addAndHandle(n1: number, n2: number, cb: (num: number) => void) {
+  const result = n1 + n2;
+  cb(result);
 }
+
 printResult(add2(5, 12));
-var combineValues;
+let combineValues: (a: number, b: number) => number;
+
 combineValues = add2;
 console.log('huhu' + combineValues(8, 8));
-addAndHandle(10, 20, function (result) {
-    console.log('huhu' + result);
-    return result;
+
+addAndHandle(10, 20, result => {
+  console.log('huhu' + result);
+  return result;
 });
