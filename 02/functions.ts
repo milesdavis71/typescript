@@ -19,4 +19,5 @@ console.log('huhu' + combineValues(8, 8));
 
 addAndHandle(10, 20, result => {
   console.log('huhu' + result);
+  return result;
 });
