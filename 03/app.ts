@@ -1,0 +1,2 @@
+const myself = 'pitju';
+myself;
