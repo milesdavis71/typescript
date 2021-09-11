@@ -1,4 +1,5 @@
 "use strict";
+<<<<<<< HEAD
 window.addEventListener('load', function () {
     const counterContainer = document.querySelector('.count');
     let counter = 0;
@@ -17,3 +18,12 @@ window.addEventListener('load', function () {
 // btn?.addEventListener('click', function (event) {
 //   console.log(event.type);
 // });
+=======
+const myself = 'pitju';
+myself;
+const button = document.querySelector('button');
+<<<<<<< HEAD
+=======
+button === null || button === void 0 ? void 0 : button.addEventListener;
+>>>>>>> 72451f13009285222964b24aafab662ef659fe99
+>>>>>>> 39b77ed04a2f96a35863388ba1079b32c60a1ce7
