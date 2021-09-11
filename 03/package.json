@@ -1,7 +1,7 @@
 {
   "name": "02",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
     "test": "",
     "start": "lite-server"
@@ -11,5 +11,8 @@
   "devDependencies": {
     "lite-server": "^2.6.1"
   },
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "live-server": "^1.2.1"
+  }
 }
