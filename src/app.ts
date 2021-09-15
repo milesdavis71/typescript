@@ -13,11 +13,11 @@ const [a, b, c, ...others] = [...sport, ...sportTobb];
 console.log(a, b, c, others);
 
 const person = {
-  name: 'Pitju',
-  age: 50,
+  nev: 'Pitju',
+  kor: 50,
 };
 
-const { name, age } = person;
+const { nev, kor } = person;
 const add = (...numbers: number[]) => {
   return numbers.reduce((curResult, curValue) => {
     return curResult + curValue;

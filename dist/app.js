@@ -5,8 +5,14 @@ const printOutput = output => console.log(output);
 // printOutput(add(5));
 const sport = ['foci', 'hoki', 'sí'];
 const sportTobb = ['darts', 'teke'];
+const osszesSport = sport.push(...sportTobb);
 const [a, b, c, ...others] = [...sport, ...sportTobb];
 console.log(a, b, c, others);
+const person = {
+    nev: 'Pitju',
+    kor: 50,
+};
+const { nev, kor } = person;
 const add = (...numbers) => {
     return numbers.reduce((curResult, curValue) => {
         return curResult + curValue;
