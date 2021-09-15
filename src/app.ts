@@ -8,9 +8,16 @@ const printOutput: (a: string | number) => void = output => console.log(output);
 
 const sport = ['foci', 'hoki', 'sí'];
 const sportTobb = ['darts', 'teke'];
+const osszesSport = sport.push(...sportTobb);
 const [a, b, c, ...others] = [...sport, ...sportTobb];
 console.log(a, b, c, others);
 
+const person = {
+  name: 'Pitju',
+  age: 50,
+};
+
+const { name, age } = person;
 const add = (...numbers: number[]) => {
   return numbers.reduce((curResult, curValue) => {
     return curResult + curValue;
