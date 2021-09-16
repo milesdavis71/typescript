@@ -1,28 +1,10 @@
-// const add = (a: number, b: number = 7) => a + b;
+class Department {
+  name: string;
 
-// const printOutput = (output: string | number) => console.log(output);
+  constructor(n: string) {
+    this.name = n;
+  }
+}
 
-const printOutput: (a: string | number) => void = output => console.log(output);
-
-// printOutput(add(5));
-
-const sport = ['foci', 'hoki', 'sí'];
-const sportTobb = ['darts', 'teke'];
-const osszesSport = sport.push(...sportTobb);
-const [a, b, c, ...others] = [...sport, ...sportTobb];
-console.log(a, b, c, others);
-
-const person = {
-  nev: 'Pitju',
-  kor: 50,
-};
-
-const { nev, kor } = person;
-const add = (...numbers: number[]) => {
-  return numbers.reduce((curResult, curValue) => {
-    return curResult + curValue;
-  }, 0);
-};
-
-const addedNumbers = add(5, 10, 2, 3.7);
-console.log(addedNumbers);
+const accounting = new Department('Accounting');
+console.log(accounting);
