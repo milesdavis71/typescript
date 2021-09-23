@@ -20,8 +20,7 @@ class Department {
 const accounting = new Department('d1', 'Accounting');
 accounting.addEmployee('pityu');
 accounting.addEmployee('gabi');
-// accounting.employees[2] = 'Huhu';
-accounting.describe();
+accounting.name = 'Huhu';
 accounting.printEmployeeInformation();
 // const accountingCopy = { name: 'DUMMY', describe: accounting.describe };
 // accountingCopy.describe();
