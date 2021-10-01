@@ -31,8 +31,16 @@ class AccountingDepartment extends Department {
     if (this.lastReport) {
       return this.lastReport;
     }
-    throw new Error('No report found.');
+    throw new Error('Nincs jelentés.');
   }
+
+  set mostRecentReport(value: string) {
+    if (!value) {
+      throw new Error('Adj át egy megfelelő jelentést');
+    }
+    this.addReport(value);
+  }
+
   constructor(id: string, private reports: string[]) {
     super(id, 'Accounting');
     this.lastReport = reports[0];
@@ -40,6 +48,7 @@ class AccountingDepartment extends Department {
 
   addReport(text: string) {
     this.reports.push(text);
+    this.lastReport = text;
   }
 
   printReports() {
@@ -48,7 +57,7 @@ class AccountingDepartment extends Department {
 }
 const accounting = new AccountingDepartment('d3', []);
 
-console.log(accounting.mostRecentReport);
+// console.log(accounting.mostRecentReport);
 
 const it = new ITDepartment('d2', ['max']);
 
@@ -59,7 +68,7 @@ it.describe();
 it.name = 'NEW NAME';
 it.printEmployeeInformation();
 console.log(it);
-
+accounting.mostRecentReport = '2021. 09. 30';
 accounting.addReport('Valami elromlott.');
 accounting.printReports();
 
