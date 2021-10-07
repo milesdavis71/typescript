@@ -99,3 +99,6 @@ function moveAnimal(animal: Animal) {
   console.log(`Moving at speed: ${speed} km/h`);
 }
 moveAnimal({ type: 'bird', flyingSpeed: 100 });
+const userInputElement = document.getElementById('huhu');
+if (userInputElement)
+  (userInputElement as HTMLInputElement).value = 'Helló belló';
