@@ -18,4 +18,4 @@ function merge(objA: object, objB: object): object {
 }
 
 const mergeObj = merge({ name: 'Max' }, { age: 30 });
-mergeObj.age;
+mergeObj;
