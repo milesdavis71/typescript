@@ -1,36 +1,17 @@
 "use strict";
-var e1 = {
-    name: 'Max',
-    privileges: ['create server'],
-    startDate: new Date(),
-};
-function add(a, b) {
-    if (typeof a === 'string' || typeof b === 'string') {
-        return a.toString() + b.toString();
-    }
-    return a + b;
+// const names: Array<string> = []; // string[]
+// names[0].split(' ');
+// const promise: Promise<string> = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve('This is done!');
+//   }, 2000);
+// });
+// promise.then(data => {
+//   data.split(' ');
+// });
+function merge(objA, objB) {
+    return Object.assign(objA, objB);
 }
-var result = add('Max', 'Schwarz');
-result.split(' ');
-console.log(result);
-console.log(typeof result);
-function moveAnimal(animal) {
-    var speed;
-    switch (animal.type) {
-        case 'bird':
-            speed = animal.flyingSpeed;
-            break;
-        case 'horse':
-            speed = animal.runningSpeed;
-    }
-    console.log("Moving at speed: " + speed + " km/h");
-}
-moveAnimal({ type: 'bird', flyingSpeed: 100 });
-var userInputElement = document.getElementById('huhu');
-if (userInputElement)
-    userInputElement.value = 'Helló belló';
-var errorBag = {
-    email: 'Not a valid email',
-    username: 'Must start with a capital character',
-};
+const mergeObj = merge({ name: 'Max' }, { age: 30 });
+mergeObj.age;
 //# sourceMappingURL=app.js.map
