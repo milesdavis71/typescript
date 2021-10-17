@@ -16,14 +16,18 @@ function Logger(logString) {
     };
 }
 function RenderMarkup(markup, hookId) {
-    return function (constructor) {
-        console.log('2. Renderelő dekorátor gyár bekapcsolva.');
-        const hookEl = document.getElementById(hookId);
-        const p = new constructor();
-        if (hookEl) {
-            hookEl.innerHTML = markup;
-            hookEl.querySelector('h1').textContent = p.name;
-        }
+    console.log('2. Renderelő dekorátor gyár bekapcsolva.');
+    return function (originalConstructor) {
+        return class extends originalConstructor {
+            constructor(..._) {
+                super();
+                const hookEl = document.getElementById(hookId);
+                if (hookEl) {
+                    hookEl.innerHTML = markup;
+                    hookEl.querySelector('h1').textContent = this.name;
+                }
+            }
+        };
     };
 }
 // @Logger('LOGGING – PERSON')
