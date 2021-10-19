@@ -92,3 +92,33 @@ class Product {
     return this._price * (1 + tax);
   }
 }
+
+function Autobind(
+  _: any,
+  _2: string | Symbol | number,
+  descriptor: PropertyDescriptor
+) {
+  const originalMethod = descriptor.value;
+  const adjDescriptor: PropertyDescriptor = {
+    configurable: true,
+    enumerable: false,
+    get() {
+      const bindFn = originalMethod.bind(this);
+      return bindFn;
+    },
+  };
+  return adjDescriptor;
+}
+
+class Printer {
+  message = 'Működik';
+
+  @Autobind
+  showMessage() {
+    console.log(this.message);
+  }
+}
+const printer = new Printer();
+
+const button = document.querySelector('button')!;
+button.addEventListener('click', printer.showMessage);
