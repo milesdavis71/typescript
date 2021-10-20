@@ -118,4 +118,65 @@ __decorate([
 const printer = new Printer();
 const button = document.querySelector('button');
 button.addEventListener('click', printer.showMessage);
+const registeredValidators = {};
+function Required(target, propName) {
+    registeredValidators[target.constructor.name] = {
+        // javítva a külöm megadott hibajavítás alapján
+        [propName]: [
+            ...registeredValidators[target.constructor.name][propName],
+            'reuqired',
+        ],
+    };
+}
+function PositiveNumber(target, propName) {
+    registeredValidators[target.constructor.name] = {
+        // javítva a külöm megadott hibajavítás alapján
+        [propName]: [
+            ...registeredValidators[target.constructor.name][propName],
+            'reuqired',
+        ],
+    };
+}
+function validate(obj) {
+    const objValidatorConfig = registeredValidators[obj.constructor.name];
+    if (!objValidatorConfig) {
+        return true;
+    }
+    for (const prop in objValidatorConfig) {
+        for (const validator of objValidatorConfig[prop]) {
+            switch (validator) {
+                case 'required':
+                    return !!obj[prop];
+                case 'positive':
+                    return obj[prop] > 0;
+            }
+        }
+    }
+    return true;
+}
+class Course {
+    constructor(t, p) {
+        this.title = t;
+        this.price = p;
+    }
+}
+__decorate([
+    Required
+], Course.prototype, "title", void 0);
+__decorate([
+    PositiveNumber
+], Course.prototype, "price", void 0);
+const courseForm = document.querySelector('form');
+courseForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const titleEl = document.getElementById('title');
+    const priceEl = document.getElementById('price');
+    const title = titleEl.value;
+    const price = +priceEl.value;
+    const createdCourse = new Course(title, price);
+    if (!validate(createdCourse)) {
+        alert('Helytelen beviteli adat, próbálja újra.');
+    }
+    console.log(createdCourse);
+});
 //# sourceMappingURL=app.js.map
