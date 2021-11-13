@@ -1,22 +1,51 @@
 "use strict";
+// Project State Management
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+class ProjectState {
+    constructor() {
+        this.listeners = [];
+        this.projects = [];
+    }
+    static getInstance() {
+        if (this.instance) {
+            return this.instance;
+        }
+        this.instance = new ProjectState();
+        return this.instance;
+    }
+    addListener(listenerFn) {
+        this.listeners.push(listenerFn);
+    }
+    addProject(title, description, numOfPeople) {
+        const newProject = {
+            id: Math.random().toString(),
+            title: title,
+            description: description,
+            people: numOfPeople,
+        };
+        this.projects.push(newProject);
+        for (const listenerFn of this.listeners) {
+            listenerFn(this.projects.slice());
+        }
+    }
+}
+const projectState = ProjectState.getInstance();
 function validate(validatableInput) {
-    var _a;
     let isValid = true;
     if (validatableInput.required) {
-        isValid = isValid && ((_a = validatableInput.value) === null || _a === void 0 ? void 0 : _a.toString().trim().length) !== 0;
+        isValid = isValid && validatableInput.value.toString().trim().length !== 0;
     }
     if (validatableInput.minLength != null &&
         typeof validatableInput.value === 'string') {
         isValid =
             isValid && validatableInput.value.length >= validatableInput.minLength;
     }
-    if (validatableInput.maxLength &&
+    if (validatableInput.maxLength != null &&
         typeof validatableInput.value === 'string') {
         isValid =
             isValid && validatableInput.value.length <= validatableInput.maxLength;
@@ -25,51 +54,66 @@ function validate(validatableInput) {
         typeof validatableInput.value === 'number') {
         isValid = isValid && validatableInput.value >= validatableInput.min;
     }
-    if (validatableInput.max && typeof validatableInput.value === 'number') {
+    if (validatableInput.max != null &&
+        typeof validatableInput.value === 'number') {
         isValid = isValid && validatableInput.value <= validatableInput.max;
     }
     return isValid;
 }
-// Autobind decorator
-function Autobind(_, _2, descriptor) {
-    const origMethodValue = descriptor.value;
-    const modDescriptor = {
+// autobind decorator
+function autobind(_, _2, descriptor) {
+    const originalMethod = descriptor.value;
+    const adjDescriptor = {
         configurable: true,
-        enumerable: false,
         get() {
-            const boundFn = origMethodValue.bind(this);
+            const boundFn = originalMethod.bind(this);
             return boundFn;
         },
     };
-    return modDescriptor;
+    return adjDescriptor;
 }
+// ProjectList Class
 class ProjectList {
     constructor(type) {
         this.type = type;
         this.templateElement = document.getElementById('project-list');
         this.hostElement = document.getElementById('app');
-        const importNode = document.importNode(this.templateElement.content, true);
-        this.element = importNode.firstElementChild;
+        this.assignedProjects = [];
+        const importedNode = document.importNode(this.templateElement.content, true);
+        this.element = importedNode.firstElementChild;
         this.element.id = `${this.type}-projects`;
+        projectState.addListener((projects) => {
+            this.assignedProjects = projects;
+            this.renderProjects();
+        });
         this.attach();
         this.renderContent();
     }
+    renderProjects() {
+        const listEl = document.getElementById(`${this.type}-projects-list`);
+        for (const prjItem of this.assignedProjects) {
+            const listItem = document.createElement('li');
+            listItem.textContent = prjItem.title;
+            listEl.appendChild(listItem);
+        }
+    }
     renderContent() {
-        const listId = `${this.type}-project-list`;
+        const listId = `${this.type}-projects-list`;
         this.element.querySelector('ul').id = listId;
         this.element.querySelector('h2').textContent =
-            this.type.toUpperCase() + 'PROJECTS';
+            this.type.toUpperCase() + ' PROJECTS';
     }
     attach() {
         this.hostElement.insertAdjacentElement('beforeend', this.element);
     }
 }
+// ProjectInput Class
 class ProjectInput {
     constructor() {
         this.templateElement = document.getElementById('project-input');
         this.hostElement = document.getElementById('app');
-        const importNode = document.importNode(this.templateElement.content, true);
-        this.element = importNode.firstElementChild;
+        const importedNode = document.importNode(this.templateElement.content, true);
+        this.element = importedNode.firstElementChild;
         this.element.id = 'user-input';
         this.titleInputElement = this.element.querySelector('#title');
         this.descriptionInputElement = this.element.querySelector('#description');
@@ -91,7 +135,7 @@ class ProjectInput {
             minLength: 5,
         };
         const peopleValidatable = {
-            value: enteredPeople,
+            value: +enteredPeople,
             required: true,
             min: 1,
             max: 5,
@@ -99,13 +143,14 @@ class ProjectInput {
         if (!validate(titleValidatable) ||
             !validate(descriptionValidatable) ||
             !validate(peopleValidatable)) {
-            alert('Invalid input!');
+            alert('Invalid input, please try again!');
+            return;
         }
         else {
             return [enteredTitle, enteredDescription, +enteredPeople];
         }
     }
-    clearInput() {
+    clearInputs() {
         this.titleInputElement.value = '';
         this.descriptionInputElement.value = '';
         this.peopleInputElement.value = '';
@@ -115,10 +160,9 @@ class ProjectInput {
         const userInput = this.gatherUserInput();
         if (Array.isArray(userInput)) {
             const [title, desc, people] = userInput;
-            console.log(title, desc, people);
-            this.clearInput();
+            projectState.addProject(title, desc, people);
+            this.clearInputs();
         }
-        console.log(this.titleInputElement.value);
     }
     configure() {
         this.element.addEventListener('submit', this.submitHandler);
@@ -128,7 +172,7 @@ class ProjectInput {
     }
 }
 __decorate([
-    Autobind
+    autobind
 ], ProjectInput.prototype, "submitHandler", null);
 const prjInput = new ProjectInput();
 const activePrjList = new ProjectList('active');
