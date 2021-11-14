@@ -91,11 +91,17 @@ class ProjectList {
     }
     renderProjects() {
         const listEl = document.getElementById(`${this.type}-projects-list`);
-        for (const prjItem of this.assignedProjects) {
-            const listItem = document.createElement('li');
-            listItem.textContent = prjItem.title;
-            listEl.appendChild(listItem);
-        }
+        // Általam átírt lista renderelés
+        const prjList = this.assignedProjects
+            .map(assProject => `<li>${assProject.title}</li>`)
+            .join('');
+        listEl.innerHTML = `<ul>${prjList}</ul>`;
+        // Eredeti
+        // for (const prjItem of this.assignedProjects) {
+        //   const listItem = document.createElement('li');
+        //   listItem.textContent = prjItem.title;
+        //   listEl.appendChild(listItem);
+        // }
     }
     renderContent() {
         const listId = `${this.type}-projects-list`;
