@@ -1,45 +1,58 @@
 "use strict";
-// Project State Management
+// class ProjectInput_ {
+//   constructor(parameters) {}
+// }
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-class ProjectState {
+class ProjectState_ {
     constructor() {
-        this.listeners = [];
         this.projects = [];
+        this.listeners = [];
     }
     static getInstance() {
         if (this.instance) {
             return this.instance;
         }
-        this.instance = new ProjectState();
-        return this.instance;
+        else {
+            this.instance = new ProjectState_();
+            return this.instance;
+        }
     }
     addListener(listenerFn) {
         this.listeners.push(listenerFn);
     }
-    addProject(title, description, numOfPeople) {
+    addProject(title, desc, numOfPeople) {
         const newProject = {
             id: Math.random().toString(),
             title: title,
-            description: description,
+            desc: desc,
             people: numOfPeople,
         };
+        console.log(newProject);
         this.projects.push(newProject);
-        for (const listenerFn of this.listeners) {
-            listenerFn(this.projects.slice());
-        }
+        this.listeners.map(listenerFn => listenerFn(this.projects.slice()));
     }
 }
-const projectState = ProjectState.getInstance();
-function validate(validatableInput) {
+const projectStateInstance = ProjectState_.getInstance();
+function autobind_(_, _2, descriptor) {
+    const origMethod = descriptor.value;
+    const modDescriptor = {
+        configurable: true,
+        get() {
+            const boundFn = origMethod.bind(this);
+            return boundFn;
+        },
+    };
+    return modDescriptor;
+}
+function validate_(validatableInput) {
     let isValid = true;
-    if (validatableInput.required) {
+    if (validatableInput.required)
         isValid = isValid && validatableInput.value.toString().trim().length !== 0;
-    }
     if (validatableInput.minLength != null &&
         typeof validatableInput.value === 'string') {
         isValid =
@@ -48,7 +61,7 @@ function validate(validatableInput) {
     if (validatableInput.maxLength != null &&
         typeof validatableInput.value === 'string') {
         isValid =
-            isValid && validatableInput.value.length <= validatableInput.maxLength;
+            isValid && validatableInput.value.length >= validatableInput.maxLength;
     }
     if (validatableInput.min != null &&
         typeof validatableInput.value === 'number') {
@@ -56,33 +69,20 @@ function validate(validatableInput) {
     }
     if (validatableInput.max != null &&
         typeof validatableInput.value === 'number') {
-        isValid = isValid && validatableInput.value <= validatableInput.max;
+        isValid = isValid && validatableInput.value >= validatableInput.max;
     }
     return isValid;
 }
-// autobind decorator
-function autobind(_, _2, descriptor) {
-    const originalMethod = descriptor.value;
-    const adjDescriptor = {
-        configurable: true,
-        get() {
-            const boundFn = originalMethod.bind(this);
-            return boundFn;
-        },
-    };
-    return adjDescriptor;
-}
-// ProjectList Class
-class ProjectList {
+class ProjectList_ {
     constructor(type) {
         this.type = type;
-        this.templateElement = document.getElementById('project-list');
-        this.hostElement = document.getElementById('app');
+        this.template = document.querySelector('#project-list');
+        this.host = document.querySelector('#app');
         this.assignedProjects = [];
-        const importedNode = document.importNode(this.templateElement.content, true);
-        this.element = importedNode.firstElementChild;
-        this.element.id = `${this.type}-projects`;
-        projectState.addListener((projects) => {
+        const importNode = document.importNode(this.template.content, true);
+        this.element = importNode.firstElementChild;
+        this.element.id = `${type}-projects`;
+        projectStateInstance.addListener((projects) => {
             this.assignedProjects = projects;
             this.renderProjects();
         });
@@ -90,47 +90,42 @@ class ProjectList {
         this.renderContent();
     }
     renderProjects() {
-        const listEl = document.getElementById(`${this.type}-projects-list`);
-        // Általam átírt lista renderelés
-        const prjList = this.assignedProjects
+        const prjList = document.querySelector(
+        // *****************************************
+        // Ha nincs renderContent, akkor itt azt írja, hogy ez a this ez null
+        `#${this.type}-projects`);
+        const prjInList = this.assignedProjects
             .map(assProject => `<li>${assProject.title}</li>`)
             .join('');
-        listEl.innerHTML = `<ul>${prjList}</ul>`;
-        // Eredeti
-        // for (const prjItem of this.assignedProjects) {
-        //   const listItem = document.createElement('li');
-        //   listItem.textContent = prjItem.title;
-        //   listEl.appendChild(listItem);
-        // }
+        prjList.innerHTML = `<ul>${prjInList}</ul>`;
     }
     renderContent() {
-        const listId = `${this.type}-projects-list`;
+        const listId = `${this.type}-projects`;
         this.element.querySelector('ul').id = listId;
         this.element.querySelector('h2').textContent =
             this.type.toUpperCase() + ' PROJECTS';
     }
     attach() {
-        this.hostElement.insertAdjacentElement('beforeend', this.element);
+        this.host.insertAdjacentElement('beforeend', this.element);
     }
 }
-// ProjectInput Class
-class ProjectInput {
+class ProjectInput_ {
     constructor() {
-        this.templateElement = document.getElementById('project-input');
-        this.hostElement = document.getElementById('app');
-        const importedNode = document.importNode(this.templateElement.content, true);
-        this.element = importedNode.firstElementChild;
+        this.template = document.querySelector('#project-input');
+        this.host = document.querySelector('#app');
+        const importNode = document.importNode(this.template.content, true);
+        this.element = importNode.firstElementChild;
         this.element.id = 'user-input';
-        this.titleInputElement = this.element.querySelector('#title');
-        this.descriptionInputElement = this.element.querySelector('#description');
-        this.peopleInputElement = this.element.querySelector('#people');
+        this.titleInput = this.element.querySelector('#title');
+        this.descriptionInput = this.element.querySelector('#description');
+        this.peopleInput = this.element.querySelector('#people');
         this.configure();
         this.attach();
     }
     gatherUserInput() {
-        const enteredTitle = this.titleInputElement.value;
-        const enteredDescription = this.descriptionInputElement.value;
-        const enteredPeople = this.peopleInputElement.value;
+        const enteredTitle = this.titleInput.value;
+        const enteredDescription = this.descriptionInput.value;
+        const enteredPeople = this.peopleInput.value;
         const titleValidatable = {
             value: enteredTitle,
             required: true,
@@ -141,46 +136,45 @@ class ProjectInput {
             minLength: 5,
         };
         const peopleValidatable = {
-            value: +enteredPeople,
+            value: enteredPeople,
             required: true,
             min: 1,
             max: 5,
         };
-        if (!validate(titleValidatable) ||
-            !validate(descriptionValidatable) ||
-            !validate(peopleValidatable)) {
-            alert('Invalid input, please try again!');
-            return;
+        if (!validate_(titleValidatable) ||
+            !validate_(descriptionValidatable) ||
+            !validate_(peopleValidatable)) {
+            return alert('Huhu');
         }
         else {
             return [enteredTitle, enteredDescription, +enteredPeople];
         }
     }
-    clearInputs() {
-        this.titleInputElement.value = '';
-        this.descriptionInputElement.value = '';
-        this.peopleInputElement.value = '';
+    clearInputFields() {
+        this.titleInput.value = '';
+        this.descriptionInput.value = '';
+        this.peopleInput.value = '';
     }
-    submitHandler(event) {
-        event.preventDefault();
-        const userInput = this.gatherUserInput();
-        if (Array.isArray(userInput)) {
-            const [title, desc, people] = userInput;
-            projectState.addProject(title, desc, people);
-            this.clearInputs();
+    submitHandler(e) {
+        e.preventDefault();
+        const inputUser = this.gatherUserInput();
+        if (Array.isArray(inputUser)) {
+            const [title, disc, people] = inputUser;
+            projectStateInstance.addProject(title, disc, people);
+            this.clearInputFields();
         }
     }
     configure() {
         this.element.addEventListener('submit', this.submitHandler);
     }
     attach() {
-        this.hostElement.insertAdjacentElement('afterbegin', this.element);
+        this.host.insertAdjacentElement('afterbegin', this.element);
     }
 }
 __decorate([
-    autobind
-], ProjectInput.prototype, "submitHandler", null);
-const prjInput = new ProjectInput();
-const activePrjList = new ProjectList('active');
-const finishedPrjList = new ProjectList('finished');
+    autobind_
+], ProjectInput_.prototype, "submitHandler", null);
+const prjInput_ = new ProjectInput_();
+const active_ = new ProjectList_('active');
+const finished_ = new ProjectList_('finished');
 //# sourceMappingURL=app_gyak.js.map

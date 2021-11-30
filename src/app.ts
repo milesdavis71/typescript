@@ -96,6 +96,7 @@ function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
 class ProjectList {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
+
   element: HTMLElement;
   assignedProjects: any[];
 
@@ -214,8 +215,7 @@ class ProjectInput {
       !validate(descriptionValidatable) ||
       !validate(peopleValidatable)
     ) {
-      alert('Invalid input, please try again!');
-      return;
+      return alert('Invalid input, please try again!');
     } else {
       return [enteredTitle, enteredDescription, +enteredPeople];
     }
