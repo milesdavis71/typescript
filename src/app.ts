@@ -4,6 +4,7 @@ enum ProjectStatus {
   Finished,
 }
 
+// Proejct base class
 class Project {
   constructor(
     public id: string,
@@ -15,7 +16,6 @@ class Project {
 }
 
 // Project State Management
-
 type Listener<T> = (items: T[]) => void;
 
 class State<T> {
@@ -54,11 +54,9 @@ class ProjectState extends State<Project> {
     // projects tömb másolata bekerül a listeners tömbbe. Minden projektnek van státusza (active/finished)
     //  Ezt a listeners tömböt szűri a ProjectList osztályban meghívott addListener metódus
     // a projekt státusza alapján. A szűrés után az 'active' vagy a 'finished' calloutba lesznek renderelve
-    // a prjektek.
+    // a projektek.
 
-    for (const listenerFn of this.listeners) {
-      listenerFn(this.projects.slice());
-    }
+    this.listeners.map(listenerFn => listenerFn(this.projects.slice()));
   }
 }
 
@@ -122,7 +120,6 @@ function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
 }
 
 // Component Base Class
-
 abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   templateElement: HTMLTemplateElement;
   hostElement: T;

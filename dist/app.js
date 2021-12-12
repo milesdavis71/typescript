@@ -11,6 +11,7 @@ var ProjectStatus;
     ProjectStatus[ProjectStatus["Active"] = 0] = "Active";
     ProjectStatus[ProjectStatus["Finished"] = 1] = "Finished";
 })(ProjectStatus || (ProjectStatus = {}));
+// Proejct base class
 class Project {
     constructor(id, title, description, people, status) {
         this.id = id;
@@ -47,10 +48,8 @@ class ProjectState extends State {
         // projects tömb másolata bekerül a listeners tömbbe. Minden projektnek van státusza (active/finished)
         //  Ezt a listeners tömböt szűri a ProjectList osztályban meghívott addListener metódus
         // a projekt státusza alapján. A szűrés után az 'active' vagy a 'finished' calloutba lesznek renderelve
-        // a prjektek.
-        for (const listenerFn of this.listeners) {
-            listenerFn(this.projects.slice());
-        }
+        // a projektek.
+        this.listeners.map(listenerFn => listenerFn(this.projects.slice()));
     }
 }
 const projectState = ProjectState.getInstance();
