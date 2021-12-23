@@ -111,7 +111,6 @@ class ProjectList extends Component {
     constructor(type) {
         super('project-list', 'app', false, `${type}-projects`);
         this.type = type;
-        this.hostElement = document.getElementById('app');
         this.assignedProjects = [];
         this.configure();
         this.renderContent();

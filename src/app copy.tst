@@ -165,6 +165,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   constructor(private type: 'active' | 'finished') {
     super('project-list', 'app', false, `${type}-projects`);
 
+    this.hostElement = document.getElementById('app')! as HTMLDivElement;
     this.assignedProjects = [];
     this.configure();
     this.renderContent();
@@ -213,7 +214,7 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
       '#title'
     ) as HTMLInputElement;
     this.descriptionInputElement = this.element.querySelector(
-      '#description'
+        '#description'
     ) as HTMLInputElement;
     this.peopleInputElement = this.element.querySelector(
       '#people'
