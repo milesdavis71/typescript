@@ -44,11 +44,16 @@ class ProjectState extends State {
     addProject(title, description, numOfPeople) {
         const newProject = new Project(Math.random().toString(), title, description, numOfPeople, ProjectStatus.Active);
         this.projects.push(newProject);
-        // Miután pusholva lett az új projekt a projekt tömbbe, az új elemmel kibővült
-        // projects tömb másolata bekerül a listeners tömbbe. Minden projektnek van státusza (active/finished)
-        //  Ezt a listeners tömböt szűri a ProjectList osztályban meghívott addListener metódus
-        // a projekt státusza alapján. A szűrés után az 'active' vagy a 'finished' calloutba lesznek renderelve
-        // a projektek.
+        this.updateListeners();
+    }
+    moveProject(projectId, newStatus) {
+        const project = this.projects.find(prj => prj.id === projectId);
+        if (project && project.status !== newStatus) {
+            project.status = newStatus;
+            this.updateListeners();
+        }
+    }
+    updateListeners() {
         this.listeners.map(listenerFn => listenerFn(this.projects.slice()));
     }
 }
@@ -164,7 +169,8 @@ class ProjectList extends Component {
         }
     }
     dropHandler(event) {
-        console.log(event.dataTransfer.getData('text/plain'));
+        const prjId = event.dataTransfer.getData('text/plain');
+        projectState.moveProject(prjId, this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished);
     }
     dragLeaveHandler(_) {
         const listEl = this.element.querySelector('ul');
@@ -195,6 +201,9 @@ class ProjectList extends Component {
 __decorate([
     autobind
 ], ProjectList.prototype, "dragOverHandler", null);
+__decorate([
+    autobind
+], ProjectList.prototype, "dropHandler", null);
 __decorate([
     autobind
 ], ProjectList.prototype, "dragLeaveHandler", null);

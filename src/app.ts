@@ -31,12 +31,13 @@ type Listener<T> = (items: T[]) => void;
 
 class State<T> {
   protected listeners: Listener<T>[] = [];
+
   addListener(listenerFn: Listener<T>) {
     this.listeners.push(listenerFn);
   }
 }
 class ProjectState extends State<Project> {
-  private projects: any[] = [];
+  private projects: Project[] = [];
   private static instance: ProjectState;
 
   private constructor() {
@@ -61,12 +62,18 @@ class ProjectState extends State<Project> {
     );
 
     this.projects.push(newProject);
-    // Miután pusholva lett az új projekt a projekt tömbbe, az új elemmel kibővült
-    // projects tömb másolata bekerül a listeners tömbbe. Minden projektnek van státusza (active/finished)
-    //  Ezt a listeners tömböt szűri a ProjectList osztályban meghívott addListener metódus
-    // a projekt státusza alapján. A szűrés után az 'active' vagy a 'finished' calloutba lesznek renderelve
-    // a projektek.
+    this.updateListeners();
+  }
 
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    const project = this.projects.find(prj => prj.id === projectId);
+    if (project && project.status !== newStatus) {
+      project.status = newStatus;
+      this.updateListeners();
+    }
+  }
+
+  private updateListeners() {
     this.listeners.map(listenerFn => listenerFn(this.projects.slice()));
   }
 }
@@ -246,8 +253,14 @@ class ProjectList
       listEl.classList.add('droppable');
     }
   }
+
+  @autobind
   dropHandler(event: DragEvent) {
-    console.log(event.dataTransfer!.getData('text/plain'));
+    const prjId = event.dataTransfer!.getData('text/plain');
+    projectState.moveProject(
+      prjId,
+      this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished
+    );
   }
 
   @autobind
