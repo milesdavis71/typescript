@@ -256,6 +256,8 @@ class ProjectList
 
   @autobind
   dropHandler(event: DragEvent) {
+    // Ez a drop bekapcsolás Firefoxhoz kell, Chrome-ban működik enélkül is.
+    event.preventDefault();
     const prjId = event.dataTransfer!.getData('text/plain');
     projectState.moveProject(
       prjId,
