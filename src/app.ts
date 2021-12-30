@@ -200,11 +200,8 @@ class ProjectItem
   }
   @autobind
   dragStartHandler(event: DragEvent) {
-    if (event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
-      event.preventDefault();
-      event.dataTransfer!.setData('text/plain', this.project.id);
-      event.dataTransfer!.effectAllowed = 'move';
-    }
+    event.dataTransfer!.setData('text/plain', this.project.id);
+    event.dataTransfer!.effectAllowed = 'move';
   }
 
   dragEndHandler(_: DragEvent) {
