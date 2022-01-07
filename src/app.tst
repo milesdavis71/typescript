@@ -15,7 +15,7 @@ enum ProjectStatus {
   Finished,
 }
 
-// Proejct base class
+// Project base class
 class Project {
   constructor(
     public id: string,
