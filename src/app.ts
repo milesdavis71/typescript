@@ -115,10 +115,23 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
         return prj.status === ProjectStatus.Finished;
       });
       this.assignedProjects = relevantProjects;
+      this.renderProject();
     });
   }
-  renderContent() {}
-  renderprojec() {}
+  renderContent() {
+    const listId = `${this.type}-projects-list`;
+    this.element.querySelector('ul')!.id = listId;
+    this.element.querySelector('h2')!.textContent = `${this.type} projektek`;
+  }
+  renderProject() {
+    const listUlEl = this.element.querySelector(
+      `${this.type}-projects-list`
+    )! as HTMLUListElement;
+    const listLiEl = this.assignedProjects
+      .map(assPrj => `<li>${assPrj}</li>`)
+      .join('');
+    listUlEl.innerHTML = listLiEl;
+  }
 }
 
 class ProejctInput extends Component<HTMLDivElement, HTMLFormElement> {
@@ -136,8 +149,27 @@ class ProejctInput extends Component<HTMLDivElement, HTMLFormElement> {
       '#people'
     )! as HTMLInputElement;
   }
-  configuration() {}
+  configuration() {
+    this.element.addEventListener('submit', this.submitHandler.bind(this));
+  }
   renderContent() {}
+  gatherUserInput(): [string, string, number] {
+    const enteredTitle = this.titleField.value;
+    const enteredDesc = this.descField.value;
+    const enteredPeople = this.peopleField.value;
+
+    return [enteredTitle, enteredDesc, +enteredPeople];
+  }
+  submitHandler(event: Event) {
+    event.preventDefault;
+    const userInput = this.gatherUserInput();
+    if (Array.isArray(userInput)) {
+      const [title, desc, people] = userInput;
+      projectState.addProjects(title, desc, people);
+    }
+  }
 }
 
 const prjInput = new ProejctInput();
+const prjListActive = new ProjectList('active');
+const prjListFinished = new ProjectList('finished');
