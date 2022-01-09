@@ -97,7 +97,7 @@ function validate(validatableInput: Validatable) {
   }
   if (
     validatableInput.minLength != null &&
-    typeof validatableInput.value === 'string'
+    typeof validatableInput.minLength === 'string'
   ) {
     isValid =
       isValid && validatableInput.value.length >= validatableInput.minLength;

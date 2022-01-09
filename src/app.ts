@@ -92,6 +92,17 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   }
 }
 
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+  private project: Project;
+  constructor(hostId: string, project: Project) {
+    super('single-project', hostId, false, project.id);
+    this.project = project;
+    this.config();
+    this.renderContent();
+  }
+  config() {}
+  renderContent() {}
+}
 class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   assignedProjects: Project[];
   constructor(private type: 'active' | 'finished') {
