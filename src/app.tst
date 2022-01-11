@@ -97,7 +97,7 @@ function validate(validatableInput: Validatable) {
   }
   if (
     validatableInput.minLength != null &&
-    typeof validatableInput.minLength === 'string'
+    typeof validatableInput.value === 'string'
   ) {
     isValid =
       isValid && validatableInput.value.length >= validatableInput.minLength;
@@ -233,6 +233,28 @@ class ProjectList
     this.configure();
     this.renderContent();
   }
+  configure() {
+    this.element.addEventListener('dragover', this.dragOverHandler);
+    this.element.addEventListener('drop', this.dropHandler);
+    this.element.addEventListener('dragleave', this.dragLeaveHandler);
+
+    projectState.addListener((projects: Project[]) => {
+      const relevantProjects = projects.filter(prj => {
+        if (this.type === 'active') {
+          return prj.status === ProjectStatus.Active;
+        }
+        return prj.status === ProjectStatus.Finished;
+      });
+      this.assignedProjects = relevantProjects;
+      this.renderProjects();
+    });
+  }
+  renderContent() {
+    const listId = `${this.type}-projects-list`;
+    this.element.querySelector('ul')!.id = listId;
+    this.element.querySelector('h2')!.textContent =
+      this.type.toUpperCase() + ' PROJECTS';
+  }
 
   private renderProjects() {
     const listEl = document.getElementById(
@@ -269,28 +291,6 @@ class ProjectList
   dragLeaveHandler(_: DragEvent) {
     const listEl = this.element.querySelector('ul')!;
     listEl.classList.remove('droppable');
-  }
-  configure() {
-    this.element.addEventListener('dragover', this.dragOverHandler);
-    this.element.addEventListener('drop', this.dropHandler);
-    this.element.addEventListener('dragleave', this.dragLeaveHandler);
-
-    projectState.addListener((projects: Project[]) => {
-      const relevantProjects = projects.filter(prj => {
-        if (this.type === 'active') {
-          return prj.status === ProjectStatus.Active;
-        }
-        return prj.status === ProjectStatus.Finished;
-      });
-      this.assignedProjects = relevantProjects;
-      this.renderProjects();
-    });
-  }
-  renderContent() {
-    const listId = `${this.type}-projects-list`;
-    this.element.querySelector('ul')!.id = listId;
-    this.element.querySelector('h2')!.textContent =
-      this.type.toUpperCase() + ' PROJECTS';
   }
 }
 
