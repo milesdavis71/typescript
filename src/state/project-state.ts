@@ -1,3 +1,5 @@
+import { Project, ProjectStatus } from '../models/project.js';
+
 type Listener<T> = (items: T[]) => void;
 
 class State<T> {
@@ -49,4 +51,4 @@ class ProjectState extends State<Project> {
   }
 }
 
-const projectState = ProjectState.getInstance();
+export const projectState = ProjectState.getInstance();
