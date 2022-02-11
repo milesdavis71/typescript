@@ -4,11 +4,13 @@
   "main": "index.js",
   "scripts": {
     "test": "",
-    "start": "lite-server"
+    "start": "lite-server",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
     "lite-server": "^2.6.1",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.5",
