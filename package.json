@@ -5,7 +5,7 @@
   "scripts": {
     "test": "",
     "start": "webpack-dev-server",
-    "build": "webpack"
+    "build": "webpack --config webpack.config.prod.js"
   },
   "author": "",
   "license": "ISC",
